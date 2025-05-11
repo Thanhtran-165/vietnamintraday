@@ -143,8 +143,9 @@ if last_update is None or (today - last_update).days >= 30:
             for symbol in batch:
                 try:
                     company = Vnstock().stock(symbol=symbol, source='TCBS').company
-                    profile = company.profile()
-                    outstanding_share = profile.iloc[0, 6]  # Lấy outstanding_share từ cột thứ 7
+                    overview = company.overview()  # Sử dụng overview thay vì profile
+                    outstanding_share = overview['outstanding_share'].iloc[0]  # Lấy từ cột 'outstanding_share'
+                    outstanding_share = int(outstanding_share)  # Ép kiểu thành int
                     outstanding_data.append({'symbol': symbol, 'outstanding_share': outstanding_share})
                     print(f"Đã lấy outstanding_share cho {symbol}")
                 except Exception as e:
